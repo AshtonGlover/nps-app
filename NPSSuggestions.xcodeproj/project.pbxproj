@@ -60,7 +60,6 @@
 		C0EB8DA02C6865D100C7699E /* FirebaseVertexAI-Preview in Frameworks */ = {isa = PBXBuildFile; productRef = C0EB8D9F2C6865D100C7699E /* FirebaseVertexAI-Preview */; };
 		C0EB8DA22C686A6400C7699E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C0EB8DA12C686A6400C7699E /* GoogleService-Info.plist */; };
 		C0EB8DA42C686FE800C7699E /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EB8DA32C686FE800C7699E /* ListView.swift */; };
-		C0EB8DA62C6870AB00C7699E /* Dog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0EB8DA52C6870AB00C7699E /* Dog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,7 +71,6 @@
 		C09409FB2C6732BC002A9075 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C0EB8DA12C686A6400C7699E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C0EB8DA32C686FE800C7699E /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
-		C0EB8DA52C6870AB00C7699E /* Dog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,7 +151,6 @@
 			children = (
 				C09409F22C6732BA002A9075 /* NPSSuggestionsApp.swift */,
 				C09409F42C6732BA002A9075 /* ContentView.swift */,
-				C0EB8DA52C6870AB00C7699E /* Dog.swift */,
 				C0EB8DA32C686FE800C7699E /* ListView.swift */,
 				C09409F62C6732BA002A9075 /* Item.swift */,
 				C0EB8DA12C686A6400C7699E /* GoogleService-Info.plist */,
@@ -296,7 +293,6 @@
 				C0EB8DA42C686FE800C7699E /* ListView.swift in Sources */,
 				C09409F52C6732BA002A9075 /* ContentView.swift in Sources */,
 				C09409F72C6732BA002A9075 /* Item.swift in Sources */,
-				C0EB8DA62C6870AB00C7699E /* Dog.swift in Sources */,
 				C09409F32C6732BA002A9075 /* NPSSuggestionsApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
