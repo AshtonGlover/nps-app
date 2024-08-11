@@ -7,12 +7,23 @@
 
 import SwiftUI
 import SwiftData
+import Firebase
+import FirebaseAuth
 
 struct ContentView: View {
     @State private var email = ""
     @State private var password = ""
+    @State private var userIsLoggedIn = false
     
     var body: some View {
+        if userIsLoggedIn {
+            ListView()
+        } else {
+            content
+        }
+    }
+    
+    var content: some View {
         ZStack {
             Color.black
             
@@ -50,7 +61,7 @@ struct ContentView: View {
                     .foregroundColor(.white)
                 
                 Button {
-                    //sign up
+                    register()
                 } label: {
                     Text("Sign up")
                         .foregroundColor(.white)
@@ -65,7 +76,7 @@ struct ContentView: View {
                 .offset(y: 100)
                 
                 Button {
-                    //login
+                    login()
                 } label: {
                     Text("Already have an account? Login")
                         .bold()
@@ -76,8 +87,31 @@ struct ContentView: View {
                 .offset(y: 110)
             }
             .frame(width:350)
+            .onAppear {
+                Auth.auth().addStateDidChangeListener { auth, user in
+                    if user != nil {
+                        userIsLoggedIn.toggle()
+                    }
+                }
+            }
         }
         .ignoresSafeArea()
+    }
+    
+    func register() {
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
+    }
+    
+    func login() {
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
     }
 }
 
