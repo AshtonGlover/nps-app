@@ -38,7 +38,7 @@ struct ContentView: View {
                 
                 TextField("Email", text: $email)
                     .foregroundColor(.white)
-                    .placeholder(when: email.isEmpty) {
+                    .placeholder(when: self.email.isEmpty) {
                         Text("Email")
                             .foregroundColor(.white)
                             .bold()
@@ -50,7 +50,7 @@ struct ContentView: View {
                 
                 SecureField("Password", text: $password)
                     .foregroundColor(.white)
-                    .placeholder(when: password.isEmpty) {
+                    .placeholder(when: self.password.isEmpty) {
                         Text("Password")
                             .foregroundColor(.white)
                             .bold()
@@ -61,7 +61,7 @@ struct ContentView: View {
                     .foregroundColor(.white)
                 
                 Button {
-                    register()
+                    self.register()
                 } label: {
                     Text("Sign up")
                         .foregroundColor(.white)
@@ -76,7 +76,7 @@ struct ContentView: View {
                 .offset(y: 100)
                 
                 Button {
-                    login()
+                    self.login()
                 } label: {
                     Text("Already have an account? Login")
                         .bold()
@@ -90,7 +90,7 @@ struct ContentView: View {
             .onAppear {
                 Auth.auth().addStateDidChangeListener { auth, user in
                     if user != nil {
-                        userIsLoggedIn.toggle()
+                        self.userIsLoggedIn.toggle()
                     }
                 }
             }
@@ -99,7 +99,7 @@ struct ContentView: View {
     }
     
     func register() {
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+        Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
             if error != nil {
                 print(error!.localizedDescription)
             }
@@ -107,7 +107,7 @@ struct ContentView: View {
     }
     
     func login() {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+        Auth.auth().signIn(withEmail: self.email, password: self.password) { result, error in
             if error != nil {
                 print(error!.localizedDescription)
             }

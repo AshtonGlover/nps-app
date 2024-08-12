@@ -7,11 +7,13 @@
 
 import SwiftUI
 import Foundation
+import MapKit
+import CoreLocation
 
 struct ListView: View {
     @State private var parksInfo: [(name: String, description: String)] = []
-    @State private var stateChosen = ""
-
+    @State private var state = ""
+    
     var body: some View {
         VStack {
             ZStack {
@@ -26,13 +28,24 @@ struct ListView: View {
                     .frame(height:1)
                     .offset(y:-110)
                 
-                //map goes here
+                MapReader { proxy in
+                    Map()
+                        .frame(height: 420)
+                        .offset(y: 100)
+                        .mapStyle(.hybrid)
+                        .onTapGesture { position in
+                            if let coordinate = proxy.convert(position, from: .global) {
+                                self.fetchCountry(from: coordinate)
+                                self.fetchParks()
+                            }
+                        }
+                }
                 
             }
             .frame(height:400)
             .ignoresSafeArea()
             
-            List(parksInfo, id: \.name) { park in
+            List(self.parksInfo, id: \.name) { park in
                 VStack(alignment: .leading) {
                     Text("Name: \(park.name)")
                         .font(.headline)
@@ -40,23 +53,37 @@ struct ListView: View {
                         .font(.subheadline)
                 }
             }
-            .onAppear {
-                fetchParks()
+            .onTapGesture {
+                self.fetchParks()
             }
+        }
+    }
+    
+    private func fetchCountry(from coordinate: CLLocationCoordinate2D) {
+        let geocoder = CLGeocoder()
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             
-            if stateChosen == "" {
-                Text("Choose a state to output data.")
-                    .offset(y:-150)
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let error = error {
+                print("Error in reverse geocoding: \(error.localizedDescription)")
+                return
+            }
+                
+            if let placemark = placemarks?.first {
+                DispatchQueue.main.async {
+                    var postalAddress = placemark.postalAddress
+                    self.state = postalAddress?.state ?? ""
+                }
             }
         }
     }
 
     private func fetchParks() {
-        if stateChosen == "" {
+        if self.state == "" {
             return
         }
         
-        let endpoint = "https://developer.nps.gov/api/v1/parks?stateCode=hi"
+        let endpoint = "https://developer.nps.gov/api/v1/parks?stateCode=" + self.state
         let apiKey = "pW71az0TZOmElqWQlbC2HOcnjLOkKNGeUyyfdRnF"
 
         guard let url = URL(string: endpoint) else {
