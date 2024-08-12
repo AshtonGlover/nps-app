@@ -90,7 +90,9 @@ struct ContentView: View {
             .onAppear {
                 Auth.auth().addStateDidChangeListener { auth, user in
                     if user != nil {
-                        self.userIsLoggedIn.toggle()
+                        if self.email != "" && self.password != "" {
+                            self.userIsLoggedIn = true
+                        }
                     }
                 }
             }
@@ -102,13 +104,21 @@ struct ContentView: View {
         Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
             if error != nil {
                 print(error!.localizedDescription)
+            } else {
+                if self.email != "" && self.password != "" {
+                    self.userIsLoggedIn = true
+                }
             }
         }
     }
     
     func login() {
         Auth.auth().signIn(withEmail: self.email, password: self.password) { result, error in
-            if error != nil {
+            if error == nil {
+                if self.email != "" && self.password != "" {
+                    self.userIsLoggedIn = true
+                }
+            } else {
                 print(error!.localizedDescription)
             }
         }

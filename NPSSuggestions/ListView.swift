@@ -71,7 +71,7 @@ struct ListView: View {
                 
             if let placemark = placemarks?.first {
                 DispatchQueue.main.async {
-                    var postalAddress = placemark.postalAddress
+                    let postalAddress = placemark.postalAddress
                     self.state = postalAddress?.state ?? ""
                 }
             }
