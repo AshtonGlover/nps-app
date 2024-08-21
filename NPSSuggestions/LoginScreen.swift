@@ -9,8 +9,16 @@ import Foundation
 import SwiftUI
 
 struct LoginScreen: View {
+    @State private var isLoggedIn = false
+    
     var body: some View {
-        Text("Login screen")
+        NavigationView {
+            Text("Login screen")
+            
+            NavigationLink(destination: MapView(), isActive: $isLoggedIn) {
+                EmptyView()
+            }
+        }
     }
 }
 

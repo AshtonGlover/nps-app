@@ -11,10 +11,10 @@ import MapKit
 import CoreLocation
 
 struct MapView: View {
-    @State private var parksInfo: [(name: String, description: String)] = []
+    @State private var parksInfo: [(name: String, description: String, imageURL: String)] = []
     @State private var state = "Choose Your State"
     var abbrToState: [String: String] = [
-        "AL": "Alabama",
+        "AL": "Alabama ",
         "AK": "Alaska",
         "AZ": "Arizona",
         "AR": "Arkansas",
@@ -70,12 +70,13 @@ struct MapView: View {
         VStack {
             ZStack {
                 Rectangle()
-                    .foregroundStyle(.linearGradient(colors: [.white, .cyan], startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .foregroundStyle(.linearGradient(colors: [.green, .brown], startPoint: .topLeading, endPoint: .bottomTrailing))
                     .frame(height:600)
                 Text(abbrToState[self.state] ?? "Choose Your State")
                     .font(.title)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .offset(y:-130)
+                    .foregroundColor(.white)
                 Rectangle()
                     .frame(height:1)
                     .offset(y:-110)
@@ -87,7 +88,7 @@ struct MapView: View {
                         .mapStyle(.standard(showsTraffic: true))
                         .onTapGesture { position in
                             if let coordinate = proxy.convert(position, from: .global) {
-                                self.fetchCountry(from: coordinate)
+                                self.fetchState(from: coordinate)
                             }
                         }
                 }
@@ -102,7 +103,28 @@ struct MapView: View {
                         .font(.headline)
                     Text("Description: \(park.description)")
                         .font(.subheadline)
+                    AsyncImage(url: URL(string: park.imageURL)) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 200)
+                                .cornerRadius(8)
+                        case .failure:
+                            Image(systemName: "exclamationmark.triangle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 200)
+                                .foregroundColor(.red)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
                 }
+                .foregroundColor(.black)
             }
             .onTapGesture {
                 self.fetchParks()
@@ -110,7 +132,7 @@ struct MapView: View {
         }
     }
     
-    private func fetchCountry(from coordinate: CLLocationCoordinate2D) {
+    private func fetchState(from coordinate: CLLocationCoordinate2D) {
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
             
@@ -160,7 +182,8 @@ struct MapView: View {
                 let parkResponse = try JSONDecoder().decode(ParkResponse.self, from: data)
                 DispatchQueue.main.async {
                     self.parksInfo = parkResponse.data.map { park in
-                        (name: park.name, description: park.description)
+                        let imageUrl = park.images.first?.url ?? "No image available"
+                        return (name: park.name, description: park.description, imageURL: imageUrl)
                     }
                 }
             } catch {
@@ -180,6 +203,11 @@ struct MapView_Previews: PreviewProvider {
 struct Park: Codable {
     let name: String
     let description: String
+    let images: [ParkImage]
+}
+
+struct ParkImage: Codable {
+    let url: String
 }
 
 struct ParkResponse: Codable {

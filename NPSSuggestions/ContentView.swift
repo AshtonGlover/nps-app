@@ -40,25 +40,29 @@ struct ContentView: View {
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .offset(y: -200)
                     
-                    TextField("Email", text: $email)
-                        .foregroundColor(.white)
-                        .placeholder(when: self.email.isEmpty) {
+                    ZStack(alignment: .leading) {
+                        if email.isEmpty {
                             Text("Email")
                                 .foregroundColor(.white)
                                 .bold()
                         }
+                        TextField("", text: $email)
+                            .foregroundColor(.white)
+                    }
                     
                     Rectangle()
                         .frame(width: 350, height: 1)
                         .foregroundColor(.white)
                     
-                    SecureField("Password", text: $password)
-                        .foregroundColor(.white)
-                        .placeholder(when: self.password.isEmpty) {
+                    ZStack(alignment: .leading) {
+                        if self.password.isEmpty {
                             Text("Password")
                                 .foregroundColor(.white)
                                 .bold()
                         }
+                        SecureField("", text: $password)
+                            .foregroundColor(.white)
+                    }
                     
                     Rectangle()
                         .frame(width: 350, height: 1)
