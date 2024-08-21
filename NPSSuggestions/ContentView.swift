@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var userIsLoggedIn = false
+    @State private var navigateToMap = false
     
     var body: some View {
         if userIsLoggedIn {
@@ -24,80 +25,92 @@ struct ContentView: View {
     }
     
     var content: some View {
-        ZStack {
-            Color.black
-            
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .foregroundStyle(.linearGradient(colors: [.green, .cyan], startPoint: .topLeading, endPoint: .bottomTrailing))
-            
-            VStack(spacing: 20) {
-                Text("Welcome")
-                    .foregroundColor(.white)
-                    .font(.system(size: 40, weight: .bold, design: .rounded))
-                    .offset(y: -200)
+        NavigationView {
+            ZStack {
+                Color.black
                 
-                TextField("Email", text: $email)
-                    .foregroundColor(.white)
-                    .placeholder(when: self.email.isEmpty) {
-                        Text("Email")
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .foregroundStyle(.linearGradient(colors: [.green, .cyan], startPoint: .topLeading, endPoint: .bottomTrailing))
+                
+                VStack(spacing: 20) {
+                    Text("Welcome")
+                        .foregroundColor(.white)
+                        .font(.system(size: 40, weight: .bold, design: .rounded))
+                        .offset(y: -200)
+                    
+                    TextField("Email", text: $email)
+                        .foregroundColor(.white)
+                        .placeholder(when: self.email.isEmpty) {
+                            Text("Email")
+                                .foregroundColor(.white)
+                                .bold()
+                        }
+                    
+                    Rectangle()
+                        .frame(width: 350, height: 1)
+                        .foregroundColor(.white)
+                    
+                    SecureField("Password", text: $password)
+                        .foregroundColor(.white)
+                        .placeholder(when: self.password.isEmpty) {
+                            Text("Password")
+                                .foregroundColor(.white)
+                                .bold()
+                        }
+                    
+                    Rectangle()
+                        .frame(width: 350, height: 1)
+                        .foregroundColor(.white)
+                    
+                    Button {
+                        self.register()
+                        if (self.password != "" && self.email != "") {
+                            self.navigateToMap = true
+                        }
+                    } label: {
+                        Text("Sign up")
                             .foregroundColor(.white)
                             .bold()
+                            .frame(width: 200, height: 40)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                    .fill(.linearGradient(colors: [.red, .pink], startPoint: .top, endPoint: .bottomTrailing))
+                            )
                     }
-                
-                Rectangle()
-                    .frame(width: 350, height: 1)
-                    .foregroundColor(.white)
-                
-                SecureField("Password", text: $password)
-                    .foregroundColor(.white)
-                    .placeholder(when: self.password.isEmpty) {
-                        Text("Password")
-                            .foregroundColor(.white)
+                    .padding(.top)
+                    .offset(y: 100)
+                    
+                    NavigationLink(destination: MapView()
+                                        .navigationBarBackButtonHidden(true)
+                                   , isActive: $navigateToMap) {
+                        EmptyView()
+                    }
+                    
+                    
+                    Button {
+                        self.login()
+                    } label: {
+                        Text("Already have an account? Login")
                             .bold()
+                            .foregroundColor(.white)
+                            .underline()
                     }
-                
-                Rectangle()
-                    .frame(width: 350, height: 1)
-                    .foregroundColor(.white)
-                
-                Button {
-                    self.register()
-                } label: {
-                    Text("Sign up")
-                        .foregroundColor(.white)
-                        .bold()
-                        .frame(width: 200, height: 40)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(.linearGradient(colors: [.red, .pink], startPoint: .top, endPoint: .bottomTrailing))
-                        )
+                    .padding(.top)
+                    .offset(y: 110)
                 }
-                .padding(.top)
-                .offset(y: 100)
-                
-                Button {
-                    self.login()
-                } label: {
-                    Text("Already have an account? Login")
-                        .bold()
-                        .foregroundColor(.white)
-                        .underline()
-                }
-                .padding(.top)
-                .offset(y: 110)
-            }
-            .frame(width:350)
-            .onAppear {
-                Auth.auth().addStateDidChangeListener { auth, user in
-                    if user != nil {
-                        if self.email != "" && self.password != "" {
-                            self.userIsLoggedIn = true
+                .frame(width:350)
+                .onAppear {
+                    Auth.auth().addStateDidChangeListener { auth, user in
+                        if user != nil {
+                            if self.email != "" && self.password != "" {
+                                self.userIsLoggedIn = true
+                            }
                         }
                     }
                 }
             }
+            .ignoresSafeArea()
         }
-        .ignoresSafeArea()
     }
     
     func register() {

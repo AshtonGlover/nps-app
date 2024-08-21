@@ -84,7 +84,7 @@ struct MapView: View {
                     Map()
                         .frame(height: 420)
                         .offset(y: 100)
-                        .mapStyle(.hybrid)
+                        .mapStyle(.standard(showsTraffic: true))
                         .onTapGesture { position in
                             if let coordinate = proxy.convert(position, from: .global) {
                                 self.fetchCountry(from: coordinate)
