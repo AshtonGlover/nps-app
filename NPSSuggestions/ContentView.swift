@@ -15,6 +15,8 @@ struct ContentView: View {
     @State private var password = ""
     @State private var userIsLoggedIn = false
     @State private var navigateToMap = false
+    @State private var errorOccurred = ""
+    @State private var navigateToLogin = false
     
     var body: some View {
         if userIsLoggedIn {
@@ -64,9 +66,6 @@ struct ContentView: View {
                     
                     Button {
                         self.register()
-                        if (self.password != "" && self.email != "") {
-                            self.navigateToMap = true
-                        }
                     } label: {
                         Text("Sign up")
                             .foregroundColor(.white)
@@ -89,6 +88,7 @@ struct ContentView: View {
                     
                     Button {
                         self.login()
+                        self.navigateToLogin = true
                     } label: {
                         Text("Already have an account? Login")
                             .bold()
@@ -97,29 +97,34 @@ struct ContentView: View {
                     }
                     .padding(.top)
                     .offset(y: 110)
+                    
+                    NavigationLink(destination: LoginScreen(), isActive: $navigateToLogin) {
+                        EmptyView()
+                    }
+                    
                 }
                 .frame(width:350)
-                .onAppear {
-                    Auth.auth().addStateDidChangeListener { auth, user in
-                        if user != nil {
-                            if self.email != "" && self.password != "" {
-                                self.userIsLoggedIn = true
-                            }
-                        }
-                    }
+
+                if (self.errorOccurred != "") {
+                    Text(self.errorOccurred)
+                        .offset(y: 80)
+                        .foregroundColor(.white)
                 }
             }
             .ignoresSafeArea()
         }
     }
     
+    
     func register() {
         Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
             if error != nil {
                 print(error!.localizedDescription)
+                self.errorOccurred = error!.localizedDescription
             } else {
                 if self.email != "" && self.password != "" {
                     self.userIsLoggedIn = true
+                    self.navigateToMap = true
                 }
             }
         }
