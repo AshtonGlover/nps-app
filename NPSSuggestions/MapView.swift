@@ -160,7 +160,7 @@ struct MapView: View {
         }
         
         let endpoint = "https://developer.nps.gov/api/v1/parks?stateCode=" + self.state
-        let apiKey = "pW71az0TZOmElqWQlbC2HOcnjLOkKNGeUyyfdRnF"
+        
         guard let url = URL(string: endpoint) else {
             print("Invalid URL")
             return
