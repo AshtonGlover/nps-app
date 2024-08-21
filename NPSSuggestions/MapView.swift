@@ -112,8 +112,9 @@ struct MapView: View {
                             image
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 200)
+                                .frame(height: 100)
                                 .cornerRadius(8)
+                                .offset(x: 80)
                         case .failure:
                             Image(systemName: "exclamationmark.triangle")
                                 .resizable()

@@ -2,8 +2,14 @@
 
 **Welcome / Sign Up Screen**
 
-<img src="welcomescreen.png" alt="Welcome / Sign Up Screen" width="300"/>
+<img src="outputs/welcomescreen.png" alt="Welcome / Sign Up Screen" width="300"/>
 
-**Here’s a demo video of the project:**
+**Login Screen**
 
-[Watch the demo video](demo.mp4)
+<img src="outputs/loginscreen.png" alt="Welcome / Sign Up Screen" width="300"/>
+
+**Sample Outputs**
+
+<img src="outputs/alaska.png" alt="Welcome / Sign Up Screen" width="300"/>
+<img src="outputs/southcarolina.png" alt="Welcome / Sign Up Screen" width="300"/>
+<img src="outputs/colorado.png" alt="Welcome / Sign Up Screen" width="300"/>
