@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 import Firebase
 import FirebaseAuth
+import MapKit
 
 struct ContentView: View {
     @State private var email = ""
@@ -91,7 +92,6 @@ struct ContentView: View {
                     
                     
                     Button {
-                        self.login()
                         self.navigateToLogin = true
                     } label: {
                         Text("Already have an account? Login")
@@ -117,6 +117,9 @@ struct ContentView: View {
             }
             .ignoresSafeArea()
         }
+        .onAppear {
+            CLLocationManager().requestWhenInUseAuthorization()
+        }
     }
     
     
@@ -130,18 +133,6 @@ struct ContentView: View {
                     self.userIsLoggedIn = true
                     self.navigateToMap = true
                 }
-            }
-        }
-    }
-    
-    func login() {
-        Auth.auth().signIn(withEmail: self.email, password: self.password) { result, error in
-            if error == nil {
-                if self.email != "" && self.password != "" {
-                    self.userIsLoggedIn = true
-                }
-            } else {
-                print(error!.localizedDescription)
             }
         }
     }

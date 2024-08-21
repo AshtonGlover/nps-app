@@ -13,6 +13,7 @@ import CoreLocation
 struct MapView: View {
     @State private var parksInfo: [(name: String, description: String, imageURL: String)] = []
     @State private var state = "Choose Your State"
+
     var abbrToState: [String: String] = [
         "AL": "Alabama ",
         "AK": "Alaska",
