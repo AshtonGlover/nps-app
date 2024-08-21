@@ -1,5 +1,5 @@
 //
-//  ListView.swift
+//  MapView.swift
 //  NPSSuggestions
 //
 //  Created by Ashton Glover on 8/11/24.
@@ -10,9 +10,61 @@ import Foundation
 import MapKit
 import CoreLocation
 
-struct ListView: View {
+struct MapView: View {
     @State private var parksInfo: [(name: String, description: String)] = []
-    @State private var state = ""
+    @State private var state = "Choose Your State"
+    var abbrToState: [String: String] = [
+        "AL": "Alabama",
+        "AK": "Alaska",
+        "AZ": "Arizona",
+        "AR": "Arkansas",
+        "CA": "California",
+        "CO": "Colorado",
+        "CT": "Connecticut",
+        "DE": "Delaware",
+        "FL": "Florida",
+        "GA": "Georgia",
+        "HI": "Hawaii",
+        "ID": "Idaho",
+        "IL": "Illinois",
+        "IN": "Indiana",
+        "IA": "Iowa",
+        "KS": "Kansas",
+        "KY": "Kentucky",
+        "LA": "Louisiana",
+        "ME": "Maine",
+        "MD": "Maryland",
+        "MA": "Massachusetts",
+        "MI": "Michigan",
+        "MN": "Minnesota",
+        "MS": "Mississippi",
+        "MO": "Missouri",
+        "MT": "Montana",
+        "NE": "Nebraska",
+        "NV": "Nevada",
+        "NH": "New Hampshire",
+        "NJ": "New Jersey",
+        "NM": "New Mexico",
+        "NY": "New York",
+        "NC": "North Carolina",
+        "ND": "North Dakota",
+        "OH": "Ohio",
+        "OK": "Oklahoma",
+        "OR": "Oregon",
+        "PA": "Pennsylvania",
+        "RI": "Rhode Island",
+        "SC": "South Carolina",
+        "SD": "South Dakota",
+        "TN": "Tennessee",
+        "TX": "Texas",
+        "UT": "Utah",
+        "VT": "Vermont",
+        "VA": "Virginia",
+        "WA": "Washington",
+        "WV": "West Virginia",
+        "WI": "Wisconsin",
+        "WY": "Wyoming"
+    ]
     
     var body: some View {
         VStack {
@@ -20,7 +72,7 @@ struct ListView: View {
                 Rectangle()
                     .foregroundStyle(.linearGradient(colors: [.white, .cyan], startPoint: .topLeading, endPoint: .bottomTrailing))
                     .frame(height:600)
-                Text("Choose Your State")
+                Text(abbrToState[self.state] ?? "Choose Your State")
                     .font(.title)
                     .font(.system(size: 20, weight: .bold, design: .rounded))
                     .offset(y:-130)
@@ -36,7 +88,6 @@ struct ListView: View {
                         .onTapGesture { position in
                             if let coordinate = proxy.convert(position, from: .global) {
                                 self.fetchCountry(from: coordinate)
-                                self.fetchParks()
                             }
                         }
                 }
@@ -73,13 +124,14 @@ struct ListView: View {
                 DispatchQueue.main.async {
                     let postalAddress = placemark.postalAddress
                     self.state = postalAddress?.state ?? ""
+                    self.fetchParks()
                 }
             }
         }
     }
 
     private func fetchParks() {
-        if self.state == "" {
+        if (self.state == "" || self.state == "Choose Your State") {
             return
         }
         
@@ -120,9 +172,9 @@ struct ListView: View {
         
 }
 
-struct ListView_Previews: PreviewProvider {
+struct MapView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView()
+        MapView()
     }
 }
 
